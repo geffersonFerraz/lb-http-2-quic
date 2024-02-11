@@ -1,0 +1,25 @@
+version: "3.5"
+services:
+  lb:
+    image: registry.geff.ws/rinha2024q1/lb-http-2-quic:v0.0.3
+    container_name: lb
+    depends_on:
+      - api01
+      - api02    
+      - db
+    environment:
+      - SEND_UPSTREAM=https://api01:8085,https://api02:8085
+      - LISTEN_PORT=9999
+      - QUIC=true
+    ports:
+      - "9999:9999" 
+    deploy:
+      resources:
+        limits:
+          cpus: "0.3"
+          memory: "50MB"
+
+networks:
+  default:
+    driver: bridge
+    name: rinha-network          
